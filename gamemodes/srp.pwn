@@ -24,7 +24,7 @@
 /* Config */
 #define SERVER_NAME			"Super RolePlay"
 #define SERVER_SHORT_NAME	"Super"
-#define SERVER_HOSTNAME 	"Super RolePlay"
+#define SERVER_HOSTNAME 	"     « Super RolePlay "SERVER_VERSION" (Español - 0.3.7) »"
 #define SERVER_GAMEMODE		"Super RolePlay "SERVER_VERSION" en español"
 #define SERVER_LANGUAGE		"Español / Spanish"
 #define SERVER_WEBSITE		"www.sa-mp.com"
@@ -5127,7 +5127,7 @@ public OnPlayerRequestSpawn(playerid) // Intentar 'spawnear' mediante la selecci
 public OnGameModeInit()
 {	
 	SetGameModeText(SERVER_GAMEMODE);
-    SendRconCommand("hostname "SERVER_HOSTNAME" - Juego de Rol [www.sa-mp.com]");
+    SendRconCommand("hostname "SERVER_HOSTNAME"");
     SendRconCommand("language "SERVER_LANGUAGE"");
 	SendRconCommand("weburl "SERVER_WEBSITE"");
 	SendRconCommand("minconnectiontime 3000");
