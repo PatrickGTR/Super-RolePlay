@@ -17,6 +17,9 @@
 #define SERVER_VERSION	"1.07"
 #define VERSION_DATE	"12/09/2017"
 
+#define BUILD_VERSION	"02"
+#define BUILD_DATE		"14/09/2017"
+
 //MODIFICAR SEGUN SLOTS DEL SERVIDOR
 #undef MAX_PLAYERS
 #define MAX_PLAYERS 100
@@ -618,7 +621,7 @@ new work_info[][work_info_info] =
 	{WORK_TYPE_NONE, 0, "ninguno",					false, 0, 0, 0},
 	{WORK_TYPE_NORMAL, 1, "taxista",				false, 0, 0, 0},
 	{WORK_TYPE_NORMAL, 1, "camionero",				false, 0, 50, 1300},
-	{WORK_TYPE_NORMAL, 2, "mecánico",				true, 0, 0, 0},
+	{WORK_TYPE_NORMAL, 3, "mecánico",				true, 0, 0, 0},
 	{WORK_TYPE_NORMAL, 1, "cosechador",				false, 20, 30, 800},
 	{WORK_TYPE_NORMAL, 1, "basurero", 				true, 60, 50, 2000},
 	{WORK_TYPE_NORMAL, 1, "leñador",				false, 0, 30, 800},
@@ -4767,7 +4770,7 @@ public OnPlayerSpawn(playerid)
 			if(ACCOUNT_INFO[playerid][ac_TIME_FOR_REP] > TIME_FOR_REP) ACCOUNT_INFO[playerid][ac_TIME_FOR_REP] = TIME_FOR_REP;
 			if(ACCOUNT_INFO[playerid][ac_TIME_FOR_REP] <= 900) ACCOUNT_INFO[playerid][ac_TIME_FOR_REP] = 3000;
 			
-			SendClientMessageEx(playerid, -1, "Eres {C4FF66}nivel %d, {FFFFFF}te quedan {C4FF66}%s minutos {FFFFFF}para la siguiente reputación.", ACCOUNT_INFO[playerid][ac_LEVEL], TimeConvert(ACCOUNT_INFO[playerid][ac_TIME_FOR_REP] / 1000));
+			if(!PLAYER_TEMP[playerid][pt_NEW_USER]) SendClientMessageEx(playerid, -1, "Eres {C4FF66}nivel %d, {FFFFFF}te quedan {C4FF66}%s minutos {FFFFFF}para la siguiente reputación.", ACCOUNT_INFO[playerid][ac_LEVEL], TimeConvert(ACCOUNT_INFO[playerid][ac_TIME_FOR_REP] / 1000));
 			PLAYER_TEMP[playerid][pt_TIME_PASSED_LAST_REP] = gettime() * 1000;
 			PLAYER_TEMP[playerid][pt_TIMERS][2] = SetTimerEx("AddPlayerReputation", ACCOUNT_INFO[playerid][ac_TIME_FOR_REP], false, "i", playerid);
 		}
@@ -10105,7 +10108,7 @@ ShowDialog(playerid, dialogid)
 		}
 		case DIALOG_HELP:
 		{
-			ShowPlayerDialog(playerid, dialogid, DIALOG_STYLE_LIST, ""DEFAULT_DIALOG_CAPTION"",
+			ShowPlayerDialog(playerid, dialogid, DIALOG_STYLE_LIST, ""SERVER_NAME" v"SERVER_VERSION"."BUILD_VERSION"",
 			
 				"\
 					{CCCCCC}- General\n\
@@ -20304,7 +20307,7 @@ CreatePlayerTextDraws(playerid)
 	PlayerTextDrawSetSelectable(playerid, PlayerTextdraws[playerid][ptextdraw_PROPERTY_CONSTRUCTOR][5], true);
 	
 	
-	PlayerTextdraws[playerid][ptextdraw_SPEEDO_METER][0] = CreatePlayerTextDraw(playerid, 445.000000, 380.000000, "I");
+	PlayerTextdraws[playerid][ptextdraw_SPEEDO_METER][0] = CreatePlayerTextDraw(playerid, 445.000000, 365.000000, "I");
 	PlayerTextDrawLetterSize(playerid, PlayerTextdraws[playerid][ptextdraw_SPEEDO_METER][0], 18.838657, 7.162145);
 	PlayerTextDrawAlignment(playerid, PlayerTextdraws[playerid][ptextdraw_SPEEDO_METER][0], 1);
 	PlayerTextDrawColor(playerid, PlayerTextdraws[playerid][ptextdraw_SPEEDO_METER][0], 135);
@@ -20315,7 +20318,7 @@ CreatePlayerTextDraws(playerid)
 	PlayerTextDrawSetProportional(playerid, PlayerTextdraws[playerid][ptextdraw_SPEEDO_METER][0], 1);
 	PlayerTextDrawSetShadow(playerid, PlayerTextdraws[playerid][ptextdraw_SPEEDO_METER][0], 0);
 
-	PlayerTextdraws[playerid][ptextdraw_SPEEDO_METER][1] = CreatePlayerTextDraw(playerid, 609.000000, 403.000000, "Velocidad:_0_Km/h~n~gasolina:_0.0_L~n~");
+	PlayerTextdraws[playerid][ptextdraw_SPEEDO_METER][1] = CreatePlayerTextDraw(playerid, 609.000000, 388.000000, "Velocidad:_0_Km/h~n~gasolina:_0.0_L~n~");
 	PlayerTextDrawLetterSize(playerid, PlayerTextdraws[playerid][ptextdraw_SPEEDO_METER][1], 0.207333, 1.218370);
 	PlayerTextDrawAlignment(playerid, PlayerTextdraws[playerid][ptextdraw_SPEEDO_METER][1], 3);
 	PlayerTextDrawColor(playerid, PlayerTextdraws[playerid][ptextdraw_SPEEDO_METER][1], -76);
@@ -20326,7 +20329,7 @@ CreatePlayerTextDraws(playerid)
 	PlayerTextDrawSetProportional(playerid, PlayerTextdraws[playerid][ptextdraw_SPEEDO_METER][1], 1);
 	PlayerTextDrawSetShadow(playerid, PlayerTextdraws[playerid][ptextdraw_SPEEDO_METER][1], 0);
 	
-	PlayerTextdraws[playerid][ptextdraw_TAXI_METER][0] = CreatePlayerTextDraw(playerid, 445.000000, 305.000000, "I");
+	PlayerTextdraws[playerid][ptextdraw_TAXI_METER][0] = CreatePlayerTextDraw(playerid, 445.000000, 290.000000, "I");
 	PlayerTextDrawLetterSize(playerid, PlayerTextdraws[playerid][ptextdraw_TAXI_METER][0], 18.838657, 10.082142);
 	PlayerTextDrawAlignment(playerid, PlayerTextdraws[playerid][ptextdraw_TAXI_METER][0], 1);
 	PlayerTextDrawColor(playerid, PlayerTextdraws[playerid][ptextdraw_TAXI_METER][0], 135);
@@ -20337,7 +20340,7 @@ CreatePlayerTextDraws(playerid)
 	PlayerTextDrawSetProportional(playerid, PlayerTextdraws[playerid][ptextdraw_TAXI_METER][0], 1);
 	PlayerTextDrawSetShadow(playerid, PlayerTextdraws[playerid][ptextdraw_TAXI_METER][0], 0);
 
-	PlayerTextdraws[playerid][ptextdraw_TAXI_METER][1] = CreatePlayerTextDraw(playerid, 609.000000, 332.000000, "Tarifa:_14$/Km~n~~n~Recorrido:_0.0_Km~n~A_pagar:_0$~n~");
+	PlayerTextdraws[playerid][ptextdraw_TAXI_METER][1] = CreatePlayerTextDraw(playerid, 609.000000, 317.000000, "Tarifa:_14$/Km~n~~n~Recorrido:_0.0_Km~n~A_pagar:_0$~n~");
 	PlayerTextDrawLetterSize(playerid, PlayerTextdraws[playerid][ptextdraw_TAXI_METER][1], 0.207332, 1.218369);
 	PlayerTextDrawAlignment(playerid, PlayerTextdraws[playerid][ptextdraw_TAXI_METER][1], 3);
 	PlayerTextDrawColor(playerid, PlayerTextdraws[playerid][ptextdraw_TAXI_METER][1], -76);
