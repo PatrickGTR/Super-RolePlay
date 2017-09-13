@@ -34470,7 +34470,7 @@ public ContinuePlayerIntro(playerid, step)
 			PLAYER_TEMP[playerid][pt_TIMERS][3] = SetTimerEx("TogglePlayerControl", 2000, false, "ib", playerid, true);
 															  
 			SendClientMessageEx(playerid, -1, "Bienvenido {C4FF66}%s, {FFFFFF}esperemos que disfrutes en {C4FF66}"SERVER_NAME".", PLAYER_TEMP[playerid][pt_RP_NAME]);
-			SendClientMessage(playerid, -1, "Si necesitas ayuda puedes utilizar el comando {C4FF66}/ayuda {FFFFFF}o puedes usar el canal de dudas con el comando {C4FF66}/d.");
+			SendClientMessage(playerid, -1, "Si necesitas ayuda puedes utilizar el comando {C4FF66}/ayuda {FFFFFF}o puedes usar el canal de dudas con el comando {C4FF66}/duda.");
 			
 			PLAYER_MISC[playerid][MISC_CONFIG_HUD] = true;
 			PLAYER_MISC[playerid][MISC_CONFIG_TIME] = true;
