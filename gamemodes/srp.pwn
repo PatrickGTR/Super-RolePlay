@@ -2810,7 +2810,8 @@ enum Temp_Enum
 	pt_LAST_SAFE_ZONE_WARNING,
 	pt_SELECTED_POLICE_OBJECT_INDEX,
 	pt_SELECTED_BYC_ID,
-	pt_SELECTED_BYC_USER_ID
+	pt_SELECTED_BYC_USER_ID,
+	bool:pt_DIALOG_RESPONDED
 };
 new PLAYER_TEMP[MAX_PLAYERS][Temp_Enum]; // PT (PlayerTemp), variables que no van a ser guardadas en base de datos.
 
@@ -8288,6 +8289,7 @@ Auto_SendPlayerAction(playerid, action[])
 ShowDialog(playerid, dialogid)
 {
 	PLAYER_TEMP[playerid][pt_PLAYER_WAITING_MP3_HTTP] = false;
+	PLAYER_TEMP[playerid][pt_DIALOG_RESPONDED] = false;
 	
 	switch(dialogid)
 	{
@@ -11413,6 +11415,9 @@ ShowDialog(playerid, dialogid)
 
 public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 {
+	if(PLAYER_TEMP[playerid][pt_DIALOG_RESPONDED]) return 1;
+	PLAYER_TEMP[playerid][pt_DIALOG_RESPONDED] = true;
+ 
 	if(!isnull(inputtext))
 	{
 		for(new i = 0; i != strlen(inputtext); i ++)
@@ -18239,6 +18244,7 @@ public OnPlayerSongFound(index, response_code, data[])
 			}
 			format(dialog_title, sizeof dialog_title, "{CCCCCC}Se han encontado '%d' resultados", dialog_counter);
 			ShowPlayerDialog(index, DIALOG_PLAYER_MP3_RESULTS, DIALOG_STYLE_LIST, dialog_title, dialog, "Reproducir", "Salir");
+			PLAYER_TEMP[index][pt_DIALOG_RESPONDED] = false;
 		}
 		else SendClientMessage(index, -1, "{999999}El resultado obtenido no puede ser comprendido.");
 	}
