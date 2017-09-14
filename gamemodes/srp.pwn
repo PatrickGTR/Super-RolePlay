@@ -17,8 +17,8 @@
 #define SERVER_VERSION	"1.07"
 #define VERSION_DATE	"12/09/2017"
 
-#define BUILD_VERSION	"02"
-#define BUILD_DATE		"14/09/2017"
+#define BUILD_VERSION	"03"
+#define BUILD_DATE		"14/09/2017 03:49"
 
 //MODIFICAR SEGUN SLOTS DEL SERVIDOR
 #undef MAX_PLAYERS
@@ -6430,6 +6430,7 @@ CMD:bebida(playerid, params[])
 }
 
 #define MIN_TIME_BETWEEN_DOUBT	60
+#define IP_SPAM_MUTE_TIME		5 //minutos
 CMD:duda(playerid, params[])
 {
 	if(!ACCOUNT_INFO[playerid][ac_DOUBT_CHANNEL]) return SendClientMessage(playerid, -1, "Para enviar una duda primero debes activar el canal de dudas con {C4FF66}/dudas");
@@ -6448,8 +6449,19 @@ CMD:duda(playerid, params[])
 			SendClientMessageEx(playerid, 0x999999AA, "Tienes que esperar %s minutos para volver a realizar otra consulta.", TimeConvert(time));
 			return 1;
 		}
+		if(StringContainsIP(params))
+		{
+			SendClientMessage(playerid, -1, "Hemos detectado una dirección IP en tu mensaje.");
+			PLAYER_MISC[playerid][MISC_MUTE] = gettime() + (IP_SPAM_MUTE_TIME * 60);
+			
+			new str[145]; format(str, 145, "{ff782b}[ADMIN] {FFFFFF}%s ha sido expulsado: SPAM en canal de dudas.", ACCOUNT_INFO[playerid][ac_NAME]);
+			SendAdminAd(-1, str);
+			
+			KickEx(playerid, 500);
+			return 1;
+		}
 	}
-
+	
  	SendMessageToDoubtChannel(playerid, params);
 	return 1;
 }
@@ -19210,6 +19222,14 @@ IsValidRPName(const string[])
 {
     new regex:reg_exp = regex_new("[A-Z][a-z]+_[A-Z][a-z]{1,3}[A-Z]?[a-z]*"); 
     new result = regex_check(string, reg_exp); 
+    regex_delete(reg_exp); 
+    return result; 
+}
+
+StringContainsIP(const string[])
+{
+    new regex:reg_exp = regex_new("([0-9]{1,3}[\\.]){3}[0-9]{1,3}"), match_results:results, pos;
+    new result = regex_search(string, reg_exp, results, pos);
     regex_delete(reg_exp); 
     return result; 
 }
@@ -34427,7 +34447,6 @@ public ContinuePlayerIntro(playerid, step)
 			SetPlayerHealthEx(playerid, CHARACTER_INFO[playerid][ch_HEALTH]);
 			SetPlayerArmourEx(playerid, CHARACTER_INFO[playerid][ch_ARMOUR]);
 			SetPlayerVirtualWorld(playerid, 0);
-			StopAudioStreamForPlayer(playerid);
 			SetSpawnInfo(playerid, NO_TEAM, CHARACTER_INFO[playerid][ch_SKIN], CHARACTER_INFO[playerid][ch_POS][0], CHARACTER_INFO[playerid][ch_POS][1], CHARACTER_INFO[playerid][ch_POS][2], CHARACTER_INFO[playerid][ch_ANGLE], 0, 0, 0, 0, 0, 0);
 			SetPlayerInterior(playerid, CHARACTER_INFO[playerid][ch_INTERIOR]);
 			
@@ -34468,6 +34487,7 @@ public ContinuePlayerIntro(playerid, step)
 		}
 		case 4:
 		{
+			StopAudioStreamForPlayer(playerid);
 			TogglePlayerControllableEx(playerid, false);
 			KillTimer(PLAYER_TEMP[playerid][pt_TIMERS][3]);
 			PLAYER_TEMP[playerid][pt_TIMERS][3] = SetTimerEx("TogglePlayerControl", 2000, false, "ib", playerid, true);
