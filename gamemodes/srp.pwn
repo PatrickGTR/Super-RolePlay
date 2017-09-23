@@ -37,6 +37,7 @@
 #define REP_MULTIPLIER 12	//12 rep * nivel para subir, si es nivel 1 necesita 12 rep para subir a nivel 2
 #define TIME_FOR_REP 1500000 // 25 minutos para obtener reputacion
 #define REP_FOR_PAYDAY 3	// payday cada 3 reputaciones
+#define CMD_LOGGIN 1 // log de comandos
 
 /* LIMITES JUGADOR */
 	// Normal User
@@ -4107,7 +4108,7 @@ new ADMIN_LEVELS[][] =
 };
 
 public OnPlayerConnect(playerid)
-{	
+{
 	PLAYER_TEMP[playerid][pt_GAME_STATE] = GAME_STATE_CONNECTED;
 	PLAYER_TEMP[playerid][pt_INTERIOR_INDEX] = -1;
 	PLAYER_TEMP[playerid][pt_PROPERTY_INDEX] = -1;
@@ -5079,6 +5080,10 @@ public OnPlayerRequestClass(playerid, classid)
 		TogglePlayerSpectatingEx(playerid, true);
 		ClearPlayerChat(playerid);
 		
+		new player_version[32];
+		GetPlayerVersion(playerid, player_version, sizeof player_version);
+		if(strcmp(player_version, "0.3.7-R2")) SendClientMessage(playerid, -1, "{999999}Actualiza tu versión de SA-MP desde: wwww.sa-mp.com");
+		
 		if(PLAYER_TEMP[playerid][pt_USER_EXIT])
 		{
 			// Usuario registrado
@@ -5142,7 +5147,7 @@ public OnGameModeInit()
 	
 	ConnectDatabase();
 	
-	UsePlayerPedAnims();
+	//UsePlayerPedAnims();
 	DisableInteriorEnterExits();
 	ShowPlayerMarkers(PLAYER_MARKERS_MODE_GLOBAL);
 	EnableStuntBonusForAll(false);
@@ -34733,7 +34738,10 @@ public OnPlayerCommandReceived(playerid, cmd[], params[], flags)
 	}
 	
 	PLAYER_TEMP[playerid][pt_ANTIFLOOD_COMMANDS] = GetTickCount();
-	printf("[CMD] %s (%d): /%s %s", ACCOUNT_INFO[playerid][ac_NAME], ACCOUNT_INFO[playerid][ac_ID], cmd, params);
+	
+	#if CMD_LOGGIN
+		printf("[CMD] %s (%d): /%s %s", ACCOUNT_INFO[playerid][ac_NAME], ACCOUNT_INFO[playerid][ac_ID], cmd, params);
+	#endif
 	return 1;
 }
 
@@ -34897,6 +34905,15 @@ AddPlayerPoliceHistory(playerid, by[], reason[])
 	return 1;
 }
 
+CMD:admac(playerid, params[])
+{
+	if(sscanf(params, "d", params[0])) return SendClientMessage(playerid, -1, "Syntax: /admac <nivel>");
+	ADMIN_LEVEL_AC_IMMUNITY = params[0];
+	
+	SendClientMessageEx(playerid, -1, "Admin level %d o mayor no sera detectado por ac.", ADMIN_LEVEL_AC_IMMUNITY);
+	return 1;
+}
+
 flags:muteard(CMD_HELPER);
 flags:desmuteard(CMD_HELPER);
 flags:trabajos(CMD_MODERATOR);
@@ -34970,3 +34987,4 @@ flags:vpcar(CMD_ADMIN);
 flags:revivir(CMD_SUPER_MODERATOR);
 flags:a(CMD_MODERATOR);
 flags:borrarop(CMD_SUPER_MODERATOR);
+flags:admac(CMD_ADMIN);
