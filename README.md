@@ -1,3 +1,5 @@
-Super RolePlay
+Super Roleplay
+https://foro.samp.es/showthread.php?t=50
 
-http://forum.sa-mp.com/showthread.php?t=640981
+Si necesitas ayuda con PAWN puedes entrar a este nuevo foro creado para la gente que habla español:
+https://foro.samp.es/
