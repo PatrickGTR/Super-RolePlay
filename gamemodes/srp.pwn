@@ -13328,7 +13328,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			if(response)
 			{
 				new url[128];
-				format(url, 128, "http://www.youtubeinmp3.com/fetch/?video=http://www.youtube.com/watch?v=%s", PLAYER_DIALOG_MP3_RESULT[playerid][listitem][videoID]);
+				format(url, 128, "http://www.convertmp3.io/fetch/?video=http://www.youtube.com/watch?v=%s", PLAYER_DIALOG_MP3_RESULT[playerid][listitem][videoID]);
 				if(PLAYER_TEMP[playerid][pt_MUSIC_FOR_PROPERTY])
 				{
 					
